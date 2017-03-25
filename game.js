@@ -66,7 +66,7 @@ function onNewPlayer(data) {
     newPlayer.id = this.id;
     
     // 새 플레이어가 생성되면 연결된 다른 플레이어에게 알림
-    this.broadcast.emit('new play', {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY()});
+    this.broadcast.emit('new player', {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY()});
     
     
     // 기존에 있던 플레이어 정보를 새로 접속한 플레이어에게 전달
