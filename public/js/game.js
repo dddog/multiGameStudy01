@@ -31,7 +31,7 @@ function init() {
 		startY = Math.round(Math.random()*(canvas.height-5));
 
 	// Initialise the local player
-	localPlayer = new Player(startX, startY);
+	localPlayer = new Player(startX, startY, getRandomColor());
     
     // 소켓 연결을 초기화
     // param1 : 서버 주소
@@ -92,7 +92,7 @@ function onSocketConnected() {
     console.log("Connected to socket server");
     
     // 소켓 접속시 새로운 플레이어를 만들겠다고 이벤트 발생
-    socket.emit("new player", {x: localPlayer.getX(), y: localPlayer.getY()});
+    socket.emit("new player", {x: localPlayer.getX(), y: localPlayer.getY(), fillStyle: localPlayer.getFillStyle()});
 };
 
 // 소켓 disconnect
@@ -105,7 +105,7 @@ function onNewPlayer(data) {
     console.log("New player connected: " + data.id);
     
     // 서버로 부터 새로운 플레이어 이벤트 발생하면 리모트플레이어배열에 추가
-    var newPlayer = new Player(data.x, data.y);
+    var newPlayer = new Player(data.x, data.y, data.fillStyle);
     newPlayer.id = data.id;
     remotePlayers.push(newPlayer);
 };
@@ -121,6 +121,7 @@ function onMovePlayer(data) {
     
     movePlayer.setX(data.x);
     movePlayer.setY(data.y);
+    movePlayer.setFillStyle(data.fillStyle);
 };
 
 // 플레이어 remove 
@@ -157,7 +158,7 @@ function update() {
 	
     // 플레이어의 위치가 변경된다면 서버에 move player 이벤트 발생
     if (localPlayer.update(keys)) {
-        socket.emit("move player", {x: localPlayer.getX(), y: localPlayer.getY()});
+        socket.emit("move player", {x: localPlayer.getX(), y: localPlayer.getY(), fillStyle: localPlayer.getFillStyle()});
     }
 };
 
@@ -190,4 +191,14 @@ function playerById(id) {
     }
     
     return false;
+};
+
+// get Random Color
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for ( var i = 0; i < 6; i++) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
 };

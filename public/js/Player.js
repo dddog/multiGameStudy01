@@ -1,10 +1,11 @@
 /**************************************************
 ** GAME PLAYER CLASS
 **************************************************/
-var Player = function(startX, startY) {
+var Player = function(startX, startY, startFillStyle) {
 	var x = startX,
 		y = startY,
         id,
+        fillStyle = startFillStyle,
 		moveAmount = 2;
     
     var getX = function() {
@@ -13,11 +14,17 @@ var Player = function(startX, startY) {
     var getY = function() {
         return y;
     };
+    var getFillStyle = function() {
+        return fillStyle;
+    };
     var setX = function(newX) {
         x = newX;
     };
     var setY = function(newY) {
         y = newY;
+    };
+    var setFillStyle = function(newFillStyle) {
+        fillStyle = newFillStyle;
     };
 
 	var update = function(keys) {
@@ -44,14 +51,17 @@ var Player = function(startX, startY) {
 	};
 
 	var draw = function(ctx) {
+        ctx.fillStyle = fillStyle;
 		ctx.fillRect(x-5, y-5, 10, 10);
 	};
 
 	return {
         getX: getX,
         getY: getY,
+        getFillStyle: getFillStyle,
         setX: setX,
         setY: setY,
+        setFillStyle: setFillStyle,
 		update: update,
 		draw: draw
 	}

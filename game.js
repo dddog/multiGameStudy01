@@ -62,11 +62,11 @@ function onClientDisconnect() {
 function onNewPlayer(data) {
     
     // 새로운 플레이어 생성
-    var newPlayer = new Player(data.x, data.y);
+    var newPlayer = new Player(data.x, data.y, data.fillStyle);
     newPlayer.id = this.id;
     
     // 새 플레이어가 생성되면 연결된 다른 플레이어에게 알림
-    this.broadcast.emit('new player', {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY()});
+    this.broadcast.emit('new player', {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY(), fillStyle: newPlayer.getFillStyle()});
     
     
     // 기존에 있던 플레이어 정보를 새로 접속한 플레이어에게 전달
@@ -74,7 +74,7 @@ function onNewPlayer(data) {
     for (i = 0; i < players.length; i++) {
         existingPlayer = players[i];
         console.log('emit[new player]: '+existingPlayer.id);
-        this.emit('new player', {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});
+        this.emit('new player', {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY(), fillStyle: existingPlayer.getFillStyle()});
     };
     
     // 새 플레이어가 나중에 액세스시 처리 될 수 있게 플레이어 리스트에 추가한다.
@@ -91,8 +91,9 @@ function onMovePlayer(data) {
     
     movePlayer.setX(data.x);
     movePlayer.setY(data.y);
+    movePlayer.setFillStyle(data.fillStyle);
     
-    this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY()});
+    this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY(), fillStyle: movePlayer.getFillStyle()});
 }
 
 
